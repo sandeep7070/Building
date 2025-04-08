@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BUILDING MATERIAL REPORTER</title>
+    <link rel="stylesheet" href="/public/css/nav.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet"  href="/pages/footer/footer.css">
+    <style>
+
+
+       
+        
+        /* .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+         */
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        
+        .map-container {
+            width: 100%;
+            height: 500px;
+            margin-left: 80px;
+        
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .location-controls {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        button {
+            padding: 10px 15px;
+            background-color: #4285F4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #3367D6;
+        }
+    
+
+
+
+
+
+
+
+
+
+
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    body {
+        color: white;
+        font-size: 16px;
+        line-height: 1.6;
+    }
+
+    .container {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    .tag-products {
+        padding-top: 20px;
+        color: black;
+        text-align: center;
+        justify-items: center;
+    }
+
+    .background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.2);
+        z-index: -1;
+    }
+
+    .slider {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -2;
+    }
+
+    .slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transition: opacity 1.5s ease-in-out;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .slide.active {
+        opacity: 1;
+    }
+
+    .slide:nth-child(1) {
+        background-image: url("/public/product/sidebar/gmail3.jpg");
+    }
+
+    .slide:nth-child(2) {
+        background-image: url("/public/product/sidebar/gmail4.jpg");
+    }
+
+    .slide:nth-child(3) {
+        background-image: url("/public/product/sidebar/gmailsend.jpg");
+    }
+
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 25px 60px;
+        position: relative;
+        z-index: 10;
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 40px;
+    }
+
+    .nav-links a {
+        color: white;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        letter-spacing: 1.5px;
+        transition: all 0.3s;
+        padding-bottom: 5px;
+        position: relative;
+    }
+
+    .nav-links a::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: 0;
+        left: 0;
+        background-color: #001aff;
+        transition: width 0.5s ease;
+    }
+
+    .nav-links a:hover {
+        color: #ffffff;
+    }
+
+    .nav-links a:hover::after {
+        width: 100%;
+    }
+
+    .logo {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 36px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+        transform: scale(1.05);
+    }
+
+    .logo-icon {
+        font-size: 24px;
+        margin-bottom: -10px;
+        transition: transform 0.3s ease;
+    }
+
+    .logo:hover .logo-icon {
+        transform: rotate(20deg);
+    }
+
+    /* .right-menu {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+    } */
+
+    .search-icon, .menu-icon {
+        font-size: 22px;
+        cursor: pointer;
+        transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .search-icon:hover, .menu-icon:hover {
+        transform: scale(1.2);
+        color: #300fc2;
+    }
+
+    .book-btn {
+        background-color: transparent;
+        color: white;
+        padding: 12px 24px;
+        border: 2px solid rgb(3, 119, 252);
+        cursor: pointer;
+        font-weight: 500;
+        letter-spacing: 1.5px;
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+        border-radius: 20px;
+    }
+
+    .book-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(12, 12, 182, 0.76);
+        transition: left 0.3s ease;
+        z-index: -1;
+        border-radius: 20px;
+    }
+
+    .book-btn:hover {
+        color: white;
+        border-color: #00a0fd;
+        border-radius: 20px;
+    }
+
+    .book-btn:hover::before {
+        left: 0;
+    }
+
+    .content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 60vh;
+        text-align: center;
+        padding: 0 20px;
+        position: relative;
+        z-index: 10;
+    }
+
+    .content3 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 60vh;
+        text-align: center;
+        padding: 0 20px;
+        position: relative;
+        z-index: 10;
+    }
+
+    .separator {
+        width: 70px;
+        height: 3px;
+        background-color: #a92b2b;
+        margin: 20px 0;
+    }
+
+    .since {
+        font-size: 22px;
+        margin-bottom: 15px;
+        font-style: italic;
+        letter-spacing: 1px;
+    }
+
+    .title {
+        font-size: 56px;
+        font-weight: 700;
+        line-height: 1.2;
+        max-width: 800px;
+        margin-bottom: 30px;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+    }
+
+    .menu-btn {
+        background-color: #0736b6;
+        color: white;
+        padding: 16px 36px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        letter-spacing: 1.5px;
+        margin-top: 30px;
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+        border-radius: 50px;
+    }
+
+    .menu-btn::after {
+        content: '→';
+        position: absolute;
+        right: -30px;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0;
+        transition: all 0.3s;
+    }
+
+    .menu-btn:hover {
+        background-color: #050e92;
+        padding-right: 46px;
+    }
+
+    .menu-btn:hover::after {
+        right: 16px;
+        opacity: 1;
+    }
+
+    .footer {
+        position: absolute;
+        bottom: 40px;
+        left: 0;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        z-index: 10;
+    }
+
+    .hours {
+        font-size: 15px;
+        letter-spacing: 0.5px;
+    }
+
+    .address {
+        font-size: 15px;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+    }
+
+    .social-icons {
+        display: flex;
+        gap: 20px;
+        margin-top: 15px;
+    }
+
+    .social-icon {
+        font-size: 24px;
+        transition: transform 0.3s, color 0.3s;
+        cursor: pointer;
+        color: white;
+    }
+
+    .social-icon:hover {
+        transform: translateY(-5px);
+        color: #320b9c;
+    }
+
+                                  
+    .page-content {
+        display: flex;
+        max-width: 1200px;
+        margin: 40px auto;
+    }
+
+    .main-content {
+        flex: 7;
+    }
+
+    .sidebar {
+        flex: 3;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        margin-left: 30px;
+        color: #333;
+    }
+
+    .info-box {
+        display: column;
+        padding: 30px;
+        margin-bottom: 40px;
+        background-color: #fff;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        border-radius: 10px;
+        color: #333;
+    }
+
+    .imag {
+        width: 100%;
+        height: auto;
+        margin-right: 30px;
+        border-radius: 5px;
+        object-fit: cover;
+    }
+
+    .mai {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .heading2 {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: black;
+    }
+
+    .title3 {
+        font-size: 16px;
+        font-weight: normal;
+        line-height: 1.6;
+    }
+
+    /* New styles for weights and social sidebar */
+    .weights-section {
+        margin-bottom: 30px;
+    }
+
+    .weights-section h3 {
+        font-size: 20px;
+        margin-bottom: 15px;
+        color: black;
+        border-bottom: 2px solid black;
+        padding-bottom: 8px;
+    }
+
+    .weight-item {
+        /* display: flex; */
+        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .weight-name {
+        font-weight: 500;
+    }
+
+    .weight-value {
+        font-weight: 700;
+        color: #033aaf;
+    }
+
+    .social-section {
+        margin-top: 40px;
+    }
+
+    .social-section h3 {
+        font-size: 20px;
+        margin-bottom: 15px;
+        color: #b62a07;
+        border-bottom: 2px solid #0736b6;
+        padding-bottom: 8px;
+    }
+
+    .sidebar-social-icons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .sidebar-social-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background-color: #0736b6;
+        color: white;
+        border-radius: 50%;
+        font-size: 18px;
+        transition: all 0.3s ease;
+    }
+
+    .sidebar-social-icon:hover {
+        transform: translateY(-5px);
+        background-color: #320b9c;
+    }
+
+    .contact-info {
+        margin-top: 40px;
+    }
+
+    .contact-info h3 {
+        font-size: 20px;
+        margin-bottom: 15px;
+        color: #79b607;
+        border-bottom: 2px solid #0736b6;
+        padding-bottom: 8px;
+    }
+
+    .contact-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .contact-icon {
+        margin-right: 10px;
+        color: #0736b6;
+    }
+
+    @media (max-width: 992px) {
+        .page-content {
+            flex-direction: column;
+        }
+        
+        .sidebar {
+            margin-left: 0;
+            margin-top: 30px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        header {
+            padding: 15px 20px;
+        }
+
+        .nav-links {
+            display: none;
+        }
+
+        .title {
+            font-size: 32px;
+        }
+        
+        .book-btn {
+            display: none;
+        }
+        
+        .info-box {
+            flex-direction: column;
+        }
+        
+        .imag {
+            width: 100%;
+            margin-right: 0;
+            margin-bottom: 20px;
+        }
+    }
+
+    /* Base responsive styles - Add to your existing CSS */
+
+/* General responsive adjustments */
+@media (max-width: 1200px) {
+  .container {
+    width: 100%;
+  }
+  
+  .page-content {
+    padding: 0 20px;
+  }
+  
+  .map-container {
+    margin-left: 20px;
+    margin-right: 20px;
+    width: calc(100% - 40px);
+  }
+}
+
+/* Tablet responsive styles */
+@media (max-width: 992px) {
+  .page-content {
+    flex-direction: column;
+  }
+  
+  .sidebar {
+    margin-left: 0;
+    margin-top: 30px;
+    width: 100%;
+  }
+  
+  .main-content {
+    width: 100%;
+  }
+  
+  .info-box {
+    padding: 20px;
+  }
+  
+  .logo div {
+    font-size: 28px;
+  }
+  
+  .title {
+    font-size: 42px;
+  }
+  
+  .content3 {
+    padding: 0 30px;
+  }
+  
+  .content3 h2 {
+    font-size: 24px;
+  }
+  
+  .footer-container3 {
+    flex-direction: column;
+  }
+  
+  .footer-section4 {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  header {
+    padding: 15px;
+    flex-direction: column;
+  }
+  
+  .logo div {
+    font-size: 22px;
+    text-align: center;
+    margin-bottom: 15px;
+  }
+  
+  /* .right-menu {
+    width: 100%;
+    justify-content: center;
+  } */
+  
+  /* .social-icons {
+    gap: 15px;
+  } */
+  
+  .nav-links {
+    display: none;
+  }
+  
+  .title {
+    font-size: 28px;
+  }
+  
+  .content, .content3 {
+    height: auto;
+    padding: 40px 15px;
+  }
+  
+  .content3 h2 {
+    font-size: 20px;
+  }
+  
+  .separator {
+    margin: 15px 0;
+  }
+  
+  .info-box {
+    flex-direction: column;
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .imag {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
+  
+  .heading2 {
+    font-size: 20px;
+  }
+  
+  .title3 {
+    font-size: 14px;
+  }
+  
+  /* Contact sidebar adjustments */
+  .weights-section h3,
+  .social-section h3,
+  .contact-info h3 {
+    font-size: 18px;
+  }
+  
+  .sidebar-social-icons {
+    justify-content: center;
+  }
+  
+  /* Map container adjustments */
+  .map-container {
+    height: 300px;
+    margin-left: 15px;
+    margin-right: 15px;
+    width: calc(100% - 30px);
+  }
+  
+  /* Footer adjustments */
+  .footer-logo {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .footer-logo .logo {
+    margin-bottom: 20px;
+    max-width: 80%;
+  }
+  
+  .newsletter input {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  .newsletter button {
+    width: 100%;
+  }
+  
+  .footer2 {
+    padding: 20px 15px;
+  }
+  
+  .footer-bottom5 {
+    text-align: center;
+    padding: 10px 0;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+  .logo div {
+    font-size: 18px;
+  }
+  
+  .content3 h2 {
+    font-size: 18px;
+  }
+  
+  .footer .social-icons {
+    gap: 10px;
+  }
+  
+  .social-icon {
+    font-size: 18px;
+  }
+  
+  .weights-item, .contact-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .weight-value {
+    margin-top: 5px;
+  }
+  
+  .heading2 {
+    font-size: 18px;
+  }
+  
+  .title3 {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+  
+  /* Further footer adjustments */
+  .footer-section4 h3 {
+    font-size: 16px;
+  }
+  
+  .footer-section4 p {
+    font-size: 13px;
+  }
+}
+
+/* Additional fixes for specific elements */
+@media (max-width: 768px) {
+  /* Fix for footer logo and layout */
+  .footer-logo {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .footer-container3 {
+    width: 100%;
+  }
+  
+  /* Social icons adjustments */
+  .social-icons, .sidebar-social-icons {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  /* Fix for the background slider on mobile */
+  .slider, .background {
+    height: 100%;
+  }
+  
+  .slide {
+    background-position: center;
+  }
+  
+  /* Improve touch targets for mobile */
+  button, .book-btn, .menu-btn, .social-icon, .sidebar-social-icon {
+    min-height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Ensure form elements are easily tappable */
+  input, select, textarea {
+    min-height: 44px;
+    font-size: 16px; /* Prevents iOS zoom on focus */
+  }
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Background overlay -->
+        <div class="background"></div>
+        
+        <!-- Image slider -->
+        <div class="slider">
+            <div class="slide active"></div>
+            <div class="slide"></div>
+            <div class="slide"></div>
+        </div>
+        
+        <header>
+            <div class="logo">
+                <div>Building Material Reporter</div>
+            </div>
+            <!-- <div class="right-menu">
+                <div class="social-icons">
+                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div> -->
+        </header>
+        
+        <div class="content3">
+            <div class="separator"></div>
+            <h2 class="Building">Building:- Material Reporter Organized By Smart Design Conclave & Awards</h2>
+        </div>
+        
+        <div class="footer">
+            <div class="social-icons">
+                <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-content">
+        <div class="main-content">
+            <div class="info-box">
+                <img class="imag" src="/Frontend/src/public/product/king.png" alt="Smart Design Conclave & Awards" />
+                <div>
+                    <div class="mai">
+                        <span class="heading2">Smart Design Conclave & Awards (SDCA)
+                            <span class="title3">
+                                is a dynamic half-day event dedicated to empowering local talent and driving excellence in design and architecture, with a special focus on Tier-2 cities. It serves as a platform to showcase cutting-edge building materials and technological advancements, fostering innovation in the industry. By bringing together professionals, thought leaders, and visionaries, SDCA contributes to India's national progress, shaping a more aesthetically enriched and future-ready built environment. The event commenced with the ceremonial lamp lighting, followed by an inaugural address by Sukesh Kumar Singh, Director of Business Mantra Reporter, the parent company of Building Material Reporter. He shared insights into BMR's offerings and future initiatives for stakeholders in the building and design industry.
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <img class="imag" src="/Frontend/src/public/product/2-tamp1.png" alt="MANTHAN Discussion" />
+                <div>
+                    <div class="mai">
+                        <span class="heading2">MANTHAN: 
+                            <span class="title3">
+                                A Discussion on Cultural Preservation and Redevelopment
+                                The panel discussion, Manthan, revolved around the theme of "Unity through Design: Redevelopment of Awadh While Preserving Cultural Heritage." The conversation underscored the need for a balanced approach to urban development that respects Awadh's rich cultural history while addressing modern infrastructure needs. The panel concluded with a call to action for architects to adopt inclusive design strategies that celebrate heritage while driving urban growth. Panellists agreed that collaboration across disciplines is essential in creating spaces that honour tradition yet foster innovation.
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <img class="imag" src="/Frontend/src/public/product/2-tamp.png" alt="Keynote Address" />
+                <div>
+                    <div class="mai">
+                        <span class="heading2">Keynote addresses by Ar. Vivek Singh Rathore
+                            <span class="title3">
+                                , Design Principal of Salient Design Studio and Ar. ShirishBeri of ShirishBeri& Associates were among the highlights. Ar. Rathore's presentation, Shift To Sustain, emphasised the urgent need for sustainability in architecture, advocating for reuse and restoration. Ar. Beri's talk, Materiality and Space, focused on using nature as a material in design, stressing the importance of integrating the local environment without disrupting ecological balance.
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="info-box">
+                <img class="imag" src="/Frontend/src/public/product/tem3.png" alt="Keynote Address" />
+                <div>
+                    <div class="mai">
+                        <span class="heading2">
+                            <span class="title3">
+                                The event was made possible through the generous support of several industry sponsors, whose contributions were vital in creating a platform for knowledge sharing and networking. The sponsors, including Haique, FIMA, KEI, Gujarat Guardian, NewMika, Alstone, VOX, and VinayakFenester, showcased their latest products and technologies, offering the attendees a glimpse into the future of architecture and design.                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="info-box">
+                <img class="imag" src="/Frontend/src/public/product/tem4.png" alt="Keynote Address" />
+                <div>
+                    <div class="mai">
+                        <span class="heading2">Success,
+                            <span class="title3">
+                               as they say, is no secret—it is the outcome of preparation, hard work, and lifelong learning. To honour excellence in the design and AEC industry, a distinguished 6-member jury, including the competition curator, dedicated their time to meticulously evaluate nearly 90 entries from across the region.                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <!-- New sidebar with weights and social media -->
+        <div class="sidebar">
+            <div class="weights-section">
+                <h3>Event Metrics</h3>
+                <div class="weight-item">
+                    <span class="weight-name">Attendees</span>
+                    <span class="weight-value">250+</span>
+                </div>
+                <div class="weight-item">
+                    <span class="weight-name">Speakers</span>
+                    <span class="weight-value">12</span>
+                </div>
+                <div class="weight-item">
+                    <span class="weight-name">Case Studies</span>
+                    <span class="weight-value">8</span>
+                </div>
+                <div class="weight-item">
+                    <span class="weight-name">Partners</span>
+                    <span class="weight-value">15</span>
+                </div>
+                <div class="weight-item">
+                    <span class="weight-name">Awards Given</span>
+                    <span class="weight-value">6</span>
+                </div>
+            </div>
+
+            <div class="social-section">
+                <h3>Follow Us</h3>
+                <div class="sidebar-social-icons">
+                    <a href="#" class="sidebar-social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="sidebar-social-icon"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="sidebar-social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="sidebar-social-icon"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" class="sidebar-social-icon"><i class="fab fa-youtube"></i></a>
+                    <a href="#" class="sidebar-social-icon"><i class="fab fa-pinterest-p"></i></a>
+                </div>
+            </div>
+
+            <div class="contact-info">
+                <h3>Contact Us</h3>
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt contact-icon"></i>
+                    <span>123 Design Street, Architecture City</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-phone contact-icon"></i>
+                    <span>+91 9876543210</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-envelope contact-icon"></i>
+                    <span>info@naturesovagen.com</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="map-container">
+        <iframe    
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d115132.86107261966!2d85.07300207866123!3d25.608175570492392!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f29937c52d4f05%3A0x831a0e05f607b270!2sPatna%2C%20Bihar!5e0!3m2!1sen!2sin!4v1712538064493!5m2!1sen!2sin" 
+            width="90%" 
+            height="90%" 
+
+            style="border:0;" 
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+    </div>
+
+  
+
+
+    
+
+
+    <!-- <div class="content1">
+        <h1>Website Content</h1>
+        <p>Scroll down to see the footer with logo and social media icons</p>
+        <img src="/api/placeholder/400/200" alt="Placeholder Image">
+    </div> -->
+
+    <footer class="footer2">
+        <div class="footer-logo">
+            <div>
+                <img class="logo" src="/public/product/tem78.png" alt="Company Logo">
+            </div>
+            <div>
+                <div class="footer-container3">
+                    <div class="footer-section4">
+                        <h3>About Us</h3>
+                        <p>We are a company dedicated to <br> providing quality products and services </p>
+                        <div class="social-icons3">
+                            <a href="#" class="facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="twitter"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="linkedin"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#" class="youtube"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                    <div class="footer-section4">
+                        <h3>Newsletter</h3>
+                        <p>Subscribe to our newsletter to get the latest updates straight to your inbox.</p>
+                        <div class="newsletter">
+                            <form>
+                                <input type="email" placeholder="Enter your email">
+                                <button type="submit">Subscribe</button>
+                            </form>
+                        </div>
+                    </div>
+
+            </div>
+            </div>
+        </div>
+            <!-- <h2>YOUR COMPANY</h2>
+            <p>Innovative solutions for a better future</p> -->
+        <!-- </div> -->
+        
+        <!-- <div class="footer-container3">
+            <div class="footer-section4">
+                <h3>About Us</h3>
+                <p>We are a company dedicated to providing quality products and services </p>
+                <div class="social-icons3">
+                    <a href="#" class="facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="linkedin"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" class="youtube"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+
+             -->
+
+            <!-- <div class="footer-section4">
+                <h3>Contact Info</h3>
+                <div class="contact-info">
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Street, City, Country</p>
+                    <p><i class="fas fa-phone"></i> +1 234 567 8900</p>
+                    <p><i class="fas fa-envelope"></i> info@example.com</p>
+                    <p><i class="fas fa-clock"></i> Mon-Fri: 9AM to 5PM</p>
+                </div>
+            </div> -->
+
+            <!-- <div class="footer-section4">
+                <h3>Newsletter</h3>
+                <p>Subscribe to our newsletter to get the latest updates straight to your inbox.</p>
+                <div class="newsletter">
+                    <form>
+                        <input type="email" placeholder="Enter your email">
+                        <button type="submit">Subscribe</button>
+                    </form>
+                </div>
+            </div> -->
+        <!-- </div> -->
+
+        <div class="footer-bottom5">
+            <p>&copy; 2025 Your Company. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+
+
+    <script>
+        // Simple slider script to rotate through images
+        document.addEventListener('DOMContentLoaded', function() {
+            const slides = document.querySelectorAll('.slide');
+            let currentSlide = 0;
+            
+            function nextSlide() {
+                slides[currentSlide].classList.remove('active');
+                currentSlide = (currentSlide + 1) % slides.length;
+                slides[currentSlide].classList.add('active');
+            }
+            
+            // Change slide every 5 seconds
+            setInterval(nextSlide, 5000);
+        });
+    </script>    
+
+
+</body>
+</html>
